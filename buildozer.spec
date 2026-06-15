@@ -6,9 +6,8 @@ source.dir = .
 source.include_exts = py,png,jpg,kv,atlas
 version = 0.1
 
-# 1. Прибираємо hostpython3 та python3 версії — Buildozer сам поставить свою стабільну, pre-patched версію Python.
-# 2. Замість точної версії numpy вказуємо <2.0.0. Це змусить завантажити останній реліз гілки 1.x (1.26.4) з PyPI у вигляді C-архіву, оминаючи помилки Git-тегів та C++20 збої.
-requirements = python3,kivy==2.3.0,pillow,numpy<2.0.0,camera4kivy,cython<3.0.0
+# ВИПРАВЛЕНО: Прибрано префікс "v" перед версією numpy, залишено чисту сумісну версію 1.26.4
+requirements = python3,kivy==2.3.0,pillow,numpy==1.26.4,camera4kivy,cython<3.0.0
 
 orientation = portrait
 fullscreen = 0
@@ -21,7 +20,7 @@ android.private_storage = True
 android.accept_sdk_license = True
 p4a.branch = master
 
-# Додатковий захист від суворих правил компілятора
+# Додатковий захист компілятора від застарілих оголошень у C-коді Python/Pillow
 android.extra_cflags = -Wno-error=implicit-function-declaration
 
 android.gradle_dependencies = "androidx.camera:camera-core:1.3.1", "androidx.camera:camera-camera2:1.3.1", "androidx.camera:camera-lifecycle:1.3.1", "androidx.camera:camera-view:1.3.1"
