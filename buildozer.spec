@@ -41,4 +41,4 @@ android.enable_androidx = True
 [buildozer]
 # (int) Log level (0 = error only, 1 = info, 2 = debug (with command output))
 log_level = 2
-warn_on_root = 1
+warn_on_root = 0
