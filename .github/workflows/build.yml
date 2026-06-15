@@ -28,10 +28,29 @@ jobs:
           pip3 install --upgrade pip
           pip3 install "cython<3.0.0" buildozer
 
-      - name: Build APK
+      - name: Patch Buildozer to disable root check
         run: |
+          BUILDOZER_INIT=$(python3 -c "import buildozer; print(buildozer.__file__)")
+          sed -i 's/self.check_root()/pass  # root check disabled/' "$BUILDOZER_INIT"
+
+      - name: Build APK with clang workaround
+        run: |
+          # Обгортка для clang, яка фільтрує -print-multi-os-directory
+          mkdir -p /tmp/clang-wrapper
+          cat > /tmp/clang-wrapper/clang << 'EOF'
+          #!/bin/bash
+          args=()
+          for arg in "$@"; do
+            if [ "$arg" != "-print-multi-os-directory" ]; then
+              args+=("$arg")
+            fi
+          done
+          exec /usr/bin/clang "${args[@]}"
+          EOF
+          chmod +x /tmp/clang-wrapper/clang
+          cp /tmp/clang-wrapper/clang /tmp/clang-wrapper/clang++
+          export PATH="/tmp/clang-wrapper:$PATH"
           export CFLAGS="-Wno-error=implicit-function-declaration"
-          echo "y"
           buildozer android debug
 
       - name: Upload APK
