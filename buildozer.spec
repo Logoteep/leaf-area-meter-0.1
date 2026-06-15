@@ -6,8 +6,8 @@ source.dir = .
 source.include_exts = py,png,jpg,kv,atlas
 version = 0.1
 
-# Фіксуємо і hostpython3, і python3 на версії 3.11, щоб уникнути конфлікту "3.11 != 3.14.2"
-requirements = hostpython3==3.11,python3==3.11,kivy==2.3.0,pillow,numpy,camera4kivy,cython<3.0.0
+# Вказуємо точну трьохзначну версію 3.11.9 для hostpython3 та python3
+requirements = hostpython3==3.11.9,python3==3.11.9,kivy==2.3.0,pillow,numpy,camera4kivy,cython<3.0.0
 
 orientation = portrait
 fullscreen = 0
