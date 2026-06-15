@@ -31,7 +31,7 @@ jobs:
       - name: Build APK
         run: |
           export CFLAGS="-Wno-error=implicit-function-declaration"
-          export BUILDOZER_ALLOW_ROOT=1
+          echo "y"
           buildozer android debug
 
       - name: Upload APK
