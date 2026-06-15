@@ -1,79 +1,44 @@
-name: Build APK (Docker Ubuntu 20.04)
+name: Build Kivy APK (Leaf Measure)
+
 on:
   push:
-    branches: [ main ]
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    # Запускаємо збірку в ізольованому контейнері для уникнення багів Clang
     container:
       image: ubuntu:20.04
 
     steps:
-      - name: Install system dependencies
+      - name: Install System Dependencies
         run: |
           apt-get update
           DEBIAN_FRONTEND=noninteractive apt-get install -y \
             openjdk-17-jdk git zip unzip colordiff ccache \
             python3-pip python3-setuptools python3-virtualenv \
-            libffi-dev libssl-dev build-essential patch autoconf \
-            libtool pkg-config zlib1g-dev libncurses5-dev libltdl-dev wget
+            libffi-dev libssl-dev build-essential patch sudo
 
-      - name: Checkout code
+      - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Install Buildozer and Cython
+      - name: Install Buildozer & Cython
         run: |
           pip3 install --upgrade pip
           pip3 install "cython<3.0.0" buildozer
 
-      - name: Setup Android SDK (licenses + build-tools)
+      - name: Build Android APK
         run: |
-          SDK_DIR="/github/home/.buildozer/android/platform/android-sdk"
-          mkdir -p "$SDK_DIR"
-          cd "$SDK_DIR"
-          wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
-          unzip -q commandlinetools-linux-11076708_latest.zip
-          mkdir -p tools/bin
-          ln -sf "$SDK_DIR/cmdline-tools/bin/sdkmanager" "$SDK_DIR/tools/bin/sdkmanager"
-          ln -sf "$SDK_DIR/cmdline-tools/bin/avdmanager" "$SDK_DIR/tools/bin/avdmanager"
-          yes | ./cmdline-tools/bin/sdkmanager --sdk_root="$SDK_DIR" --licenses
-          ./cmdline-tools/bin/sdkmanager --sdk_root="$SDK_DIR" "build-tools;34.0.0" "platforms;android-34" "platform-tools"
-
-      - name: Patch Buildozer to disable root check
-        run: |
-          BUILDOZER_INIT=$(python3 -c "import buildozer; print(buildozer.__file__)")
-          sed -i 's/self.check_root()/pass  # root check disabled/' "$BUILDOZER_INIT"
-
-      - name: Build APK with clang workaround and p4a develop
-        run: |
-          # Очистити попередній кеш python-for-android, щоб гарантовано використати develop
-          rm -rf .buildozer/android/platform/python-for-android
-          # Обгортка для clang
-          mkdir -p /tmp/clang-wrapper
-          cat > /tmp/clang-wrapper/clang << 'EOF'
-          #!/bin/bash
-          args=()
-          for arg in "$@"; do
-            if [ "$arg" != "-print-multi-os-directory" ]; then
-              args+=("$arg")
-            fi
-          done
-          exec /usr/bin/clang "${args[@]}"
-          EOF
-          chmod +x /tmp/clang-wrapper/clang
-          cp /tmp/clang-wrapper/clang /tmp/clang-wrapper/clang++
-          export PATH="/tmp/clang-wrapper:$PATH"
+          # Примусово пригнічуємо помилки неявного декларування функцій в С-модулях
           export CFLAGS="-Wno-error=implicit-function-declaration"
-          export ANDROIDSDK="/github/home/.buildozer/android/platform/android-sdk"
-          export ANDROIDAPI=34
-          export ANDROIDMINAPI=21
-          export P4A_BRANCH=develop
           buildozer android debug
 
-      - name: Upload APK
+      - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: leaf-apk
+          name: leaf-area-meter-apk
           path: bin/*.apk
