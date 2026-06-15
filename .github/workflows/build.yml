@@ -28,6 +28,9 @@ jobs:
           pip3 install "cython<3.0.0" buildozer
 
       - name: Build Android APK
+        env:
+          # Глобальний прапорець для python-for-android, який пригнічує суворі C99 помилки у застарілому коді C-бібліотек
+          P4A_EXTRA_CFLAGS: "-Wno-error=implicit-function-declaration"
         run: |
           export PATH="$PATH:/github/home/.local/bin"
           yes | buildozer android debug
