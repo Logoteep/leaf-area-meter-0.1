@@ -6,8 +6,8 @@ source.dir = .
 source.include_exts = py,png,jpg,kv,atlas
 version = 0.1
 
-# Фіксуємо numpy==1.26.4. Гілка 1.x написана на C і не викликає помилок компіляції C++ шаблонів на Android, на відміну від NumPy 2.x
-requirements = hostpython3==3.11.9,python3==3.11.9,kivy==2.3.0,pillow,numpy==1.26.4,camera4kivy,cython<3.0.0
+# Додаємо літеру 'v' перед версією numpy, оскільки рецепт робить git checkout, а теги в репозиторії NumPy мають вигляд v1.26.4
+requirements = hostpython3==3.11.9,python3==3.11.9,kivy==2.3.0,pillow,numpy==v1.26.4,camera4kivy,cython<3.0.0
 
 orientation = portrait
 fullscreen = 0
