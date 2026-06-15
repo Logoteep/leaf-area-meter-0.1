@@ -13,13 +13,14 @@ fullscreen = 0
 
 android.permissions = CAMERA, WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE
 android.api = 34
-android.minapi = 21
+
+# ВИПРАВЛЕНО: Збільшено мінімальний API до 24 для успішної компіляції numpy
+android.minapi = 24
+
 android.ndk = 25c
 android.private_storage = True
 
-# АВТОМАТИЧНЕПРИЙНЯТТЯ ЛІЦЕНЗІЙ ANDROID SDK
 android.accept_sdk_license = True
-
 p4a.branch = master
 
 android.gradle_dependencies = "androidx.camera:camera-core:1.3.1", "androidx.camera:camera-camera2:1.3.1", "androidx.camera:camera-lifecycle:1.3.1", "androidx.camera:camera-view:1.3.1"
