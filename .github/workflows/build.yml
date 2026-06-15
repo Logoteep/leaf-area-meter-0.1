@@ -18,7 +18,7 @@ jobs:
             openjdk-17-jdk git zip unzip colordiff ccache \
             python3-pip python3-setuptools python3-virtualenv \
             libffi-dev libssl-dev build-essential patch autoconf \
-            libtool pkg-config zlib1g-dev libncurses5-dev libltdl-dev
+            libtool pkg-config zlib1g-dev libncurses5-dev libltdl-dev wget
 
       - name: Checkout code
         uses: actions/checkout@v4
@@ -28,6 +28,19 @@ jobs:
           pip3 install --upgrade pip
           pip3 install "cython<3.0.0" buildozer
 
+      - name: Setup Android SDK (licenses + build-tools)
+        run: |
+          SDK_DIR="/github/home/.buildozer/android/platform/android-sdk"
+          mkdir -p "$SDK_DIR"
+          cd "$SDK_DIR"
+          wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
+          unzip -q commandlinetools-linux-11076708_latest.zip
+          mkdir -p tools/bin
+          ln -sf "$SDK_DIR/cmdline-tools/bin/sdkmanager" "$SDK_DIR/tools/bin/sdkmanager"
+          ln -sf "$SDK_DIR/cmdline-tools/bin/avdmanager" "$SDK_DIR/tools/bin/avdmanager"
+          yes | ./cmdline-tools/bin/sdkmanager --sdk_root="$SDK_DIR" --licenses
+          ./cmdline-tools/bin/sdkmanager --sdk_root="$SDK_DIR" "build-tools;34.0.0" "platforms;android-34" "platform-tools"
+
       - name: Patch Buildozer to disable root check
         run: |
           BUILDOZER_INIT=$(python3 -c "import buildozer; print(buildozer.__file__)")
@@ -35,7 +48,6 @@ jobs:
 
       - name: Build APK with clang workaround
         run: |
-          # Обгортка для clang, яка фільтрує -print-multi-os-directory
           mkdir -p /tmp/clang-wrapper
           cat > /tmp/clang-wrapper/clang << 'EOF'
           #!/bin/bash
@@ -51,6 +63,9 @@ jobs:
           cp /tmp/clang-wrapper/clang /tmp/clang-wrapper/clang++
           export PATH="/tmp/clang-wrapper:$PATH"
           export CFLAGS="-Wno-error=implicit-function-declaration"
+          export ANDROIDSDK="/github/home/.buildozer/android/platform/android-sdk"
+          export ANDROIDAPI=34
+          export ANDROIDMINAPI=21
           buildozer android debug
 
       - name: Upload APK
