@@ -10,7 +10,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    # Запускаємо збірку в ізольованому контейнері для уникнення багів Clang
     container:
       image: ubuntu:20.04
 
@@ -31,9 +30,9 @@ jobs:
           pip3 install --upgrade pip
           pip3 install "cython<3.0.0" buildozer
 
-      - - name: Build Android APK
+      - name: Build Android APK
         run: |
-         export CFLAGS="-Wno-error=implicit-function-declaration"
+          export CFLAGS="-Wno-error=implicit-function-declaration"
           yes | buildozer android debug
 
       - name: Upload APK Artifact
