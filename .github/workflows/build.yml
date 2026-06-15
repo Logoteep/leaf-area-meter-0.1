@@ -31,7 +31,6 @@ jobs:
         run: |
           export PATH="$PATH:/github/home/.local/bin"
           export CFLAGS="-Wno-error=implicit-function-declaration"
-          buildozer android clean
           yes | buildozer android debug
 
       - name: Upload APK Artifact
