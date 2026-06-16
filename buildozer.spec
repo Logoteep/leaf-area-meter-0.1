@@ -8,7 +8,7 @@ version = 0.1
 
 # ЗОЛОТА МАТРИЦЯ ВЕРСІЙ: 
 # Жорстко фіксуємо Python 3.11 та стабільний NumPy 1.26.4
-requirements = python3==3.11, kivy==2.3.0, pillow, numpy==1.26.4, camera4kivy
+requirements = hostpython3==3.11, python3==3.11, kivy==2.3.0, pillow, numpy==1.26.4, camera4kivy
 
 orientation = portrait
 fullscreen = 0
