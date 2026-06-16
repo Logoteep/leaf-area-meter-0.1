@@ -7,7 +7,7 @@ source.include_exts = py,png,jpg,kv,atlas
 version = 0.1
 
 # ВИПРАВЛЕНО: Прибрано фіксацію версії для numpy. Залишено просто numpy.
-requirements = python3,kivy==2.3.0,pillow,numpy,camera4kivy,cython<3.0.0
+requirements = python3==3.11.9,kivy==2.3.0,pillow,numpy,camera4kivy,cython<3.0.0
 
 orientation = portrait
 fullscreen = 0
