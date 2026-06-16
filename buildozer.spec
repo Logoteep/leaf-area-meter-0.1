@@ -6,9 +6,9 @@ source.dir = .
 source.include_exts = py,png,jpg,kv,atlas
 version = 0.1
 
-# ЧИСТІ ВИМОГИ: Без "v", без "3.11.9", без hostpython. 
+# ЧИСТІ ВИМОГИ: Без "v", без "3.11.9", без hostpython.
 # Стабільний Buildozer сам все правильно завантажить.
-requirements = python3,kivy==2.3.0,pillow,numpy,camera4kivy,cython<3.0.0
+requirements = python3,kivy==2.3.0,pillow<10.0.0,numpy,camera4kivy,cython<3.0.0
 
 orientation = portrait
 fullscreen = 0
