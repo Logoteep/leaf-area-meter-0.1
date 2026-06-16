@@ -6,9 +6,9 @@ source.dir = .
 source.include_exts = py,png,jpg,kv,atlas
 version = 0.1
 
-# ЧИСТІ ВИМОГИ: Без "v", без "3.11.9", без hostpython.
-# Стабільний Buildozer сам все правильно завантажить.
-requirements = python3,kivy==2.3.0,pillow<10.0.0,numpy,camera4kivy,cython<3.0.0
+# ЗОЛОТА МАТРИЦЯ ВЕРСІЙ: 
+# Жорстко фіксуємо Python 3.11 та стабільний NumPy 1.26.4
+requirements = python3==3.11, kivy==2.3.0, pillow, numpy==1.26.4, camera4kivy
 
 orientation = portrait
 fullscreen = 0
@@ -20,12 +20,9 @@ android.ndk = 25c
 android.private_storage = True
 android.accept_sdk_license = True
 
-# УВАГА: Рядок p4a.branch = master ВИДАЛЕНО, щоб уникнути експериментального Python 3.14
-
-# Захист компілятора
+# Прапорці для ігнорування суворих правил C-компілятора
 android.extra_cflags = -Wno-error=implicit-function-declaration
 
-# Залежності для стабільної роботи камери
 android.gradle_dependencies = "androidx.camera:camera-core:1.3.1", "androidx.camera:camera-camera2:1.3.1", "androidx.camera:camera-lifecycle:1.3.1", "androidx.camera:camera-view:1.3.1"
 android.enable_androidx = True
 
