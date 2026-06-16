@@ -34,7 +34,6 @@ jobs:
 
       - name: Build Android APK
         run: |
-          rm -rf .buildozer
           export CFLAGS="-Wno-error=implicit-function-declaration"
           export P4A_EXTRA_CFLAGS="-Wno-error=implicit-function-declaration"
           yes | buildozer android debug
