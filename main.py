@@ -5,7 +5,6 @@
 """
 
 import os, csv, shutil, datetime
-import numpy as np
 from PIL import Image, ImageFilter
 from collections import deque
 
@@ -21,9 +20,7 @@ from kivy.uix.popup import Popup
 from kivy.core.window import Window
 from kivy.metrics import dp
 from kivy.clock import Clock
-from kivy.utils import platform
 from camera4kivy import Preview
-
 
 class CameraScreen(Screen):
     def __init__(self, **kwargs):
@@ -164,7 +161,7 @@ class MainScreen(Screen):
         elif cat == 'rep' and len(self.reps)>1:
             r = self.reps.pop()
             self.r_spin.values = self.reps
-            if self.r_spin.text == r: self.r_spin.text = self.reps[0]
+            if self.r_spin.text == r: self.r_spin.text = self.reps
 
     def open_camera(self, instance):
         if not self.leaf_num.text.strip().isdigit():
