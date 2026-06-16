@@ -35,7 +35,7 @@ jobs:
       - name: Build Android APK
         run: |
           export CFLAGS="-Wno-error=implicit-function-declaration"
-          export P4A_EXTRA_CFLAGS="-Wno-error=implicit-function-declaration"
+          buildozer android clean
           yes | buildozer android debug
 
       - name: Upload APK Artifact
